@@ -3,7 +3,7 @@ use macroquad::{prelude::*, rand::gen_range};
 #[macroquad::main("Elf on the Shelf")]
 async fn main() {
     let mut elf = vec2(screen_width() * 0.5, screen_height() * 0.6);
-    let mut msg = String::from("Hit my face if you dare.");
+    let mut msg = String::from("Hit my face if you dare. :)");
     let mut clicks = 0;
     let mut misses = 0;
 
