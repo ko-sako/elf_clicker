@@ -7,9 +7,6 @@ async fn main() {
     let mut clicks = 0;
     let mut misses = 0;
 
-    // let elf_tex = load_texture("./assets/elf.png").await.unwrap();
-    // elf_tex.set_filter(FilterMode::Nearest);
-
     let mut frames = Vec::<Texture2D>::new();
 
     let size = 110;
@@ -29,22 +26,9 @@ async fn main() {
         let shelf_y = screen_height() * 0.75;
         draw_rectangle(0.0, shelf_y, screen_width(), shelf_height, BROWN);
 
-        // // elf face
+        // elf face
         let elf_r = 22.0;
-        // draw_circle(elf.x, elf.y, elf_r, BEIGE);
-        // // elf red hat
-        // draw_triangle(
-        //     vec2(elf.x, elf.y - elf_r - 6.0),
-        //     vec2(elf.x - 14.0, elf.y - elf_r + 8.0),
-        //     vec2(elf.x + 14.0, elf.y - elf_r + 8.0),
-        //     RED,
-        // );
-        // // elf eyes
-        // draw_circle(elf.x - 7.0, elf.y - 4.0, 3.0, BLACK);
-        // draw_circle(elf.x + 7.0, elf.y - 4.0, 3.0, BLACK);
 
-        //draw_texture(&elf_tex, elf.x - 80.0, elf.y - 80.0, WHITE);
-        // loop {
         timer += get_frame_time();
         if timer > 0.02 {
             frame_index = (frame_index + 1) % frames.len();
