@@ -1,12 +1,29 @@
-use macroquad::{prelude::*, rand::gen_range};
+use macroquad::prelude::*;
 
-#[macroquad::main("Elf on the Shelf")]
-async fn main() {
-    let mut elf = vec2(screen_width() * 0.5, screen_height() * 0.6);
-    let mut msg = String::from("Hit my face if you dare. :)");
-    let mut clicks = 0;
-    let mut misses = 0;
+use crate::{game_over::game_over_update, ingame::in_game_update, main_menu::main_menu_update};
 
+mod game_over;
+mod ingame;
+mod main_menu;
+
+struct InternalState {
+    elf: Vec2,
+    msg: String,
+    clicks: usize,
+    misses: usize,
+    frames: Vec<Texture2D>,
+    frame_index: usize,
+    timer: f32,
+}
+
+enum GameState {
+    MainMenu,
+    InGame,
+    GameOver,
+    Exit,
+}
+
+async fn run_game() {
     let mut frames = Vec::<Texture2D>::new();
 
     let size = 110;
@@ -15,45 +32,31 @@ async fn main() {
         let tex = load_texture(&path).await.unwrap();
         frames.push(tex);
     }
-    let mut frame_index = 0;
-    let mut timer = 0.0;
+
+    let mut internal_state = InternalState {
+        elf: vec2(screen_width() * 0.5, screen_height() * 0.6),
+        msg: String::from("Hit my face if you dare. :)"),
+        clicks: 0,
+        misses: 0,
+        frames,
+        frame_index: 0,
+        timer: 0.0,
+    };
+    let mut current_game_state = main_menu_update(&mut internal_state);
 
     loop {
         clear_background(WHITE);
-
-        // shelf
-        let shelf_height = 40.0;
-        let shelf_y = screen_height() * 0.75;
-        draw_rectangle(0.0, shelf_y, screen_width(), shelf_height, BROWN);
-
-        // elf face
-        let elf_r = 22.0;
-
-        timer += get_frame_time();
-        if timer > 0.02 {
-            frame_index = (frame_index + 1) % frames.len();
-            timer = 0.00;
-        }
-
-        draw_texture(&frames[frame_index], elf.x - 250.0, elf.y - 95.0, WHITE);
-
-        // click logic
-        if is_mouse_button_pressed(MouseButton::Left) {
-            let (mouse_x, mouse_y) = mouse_position();
-            let distance_from_elf = vec2(mouse_x, mouse_y).distance(elf);
-            if distance_from_elf <= elf_r + 8.0 {
-                // hit
-                clicks += 1;
-            } else {
-                misses += 1;
-            }
-            msg = format!("You hit my face: {clicks}, Missed: {misses}");
-            elf.x = gen_range(30.0, screen_width() - 30.0);
-            elf.y = gen_range(50.0, shelf_y - elf_r - 10.0);
-        }
-
-        draw_text(&msg, 20.0, 30.0, 28.0, BLACK);
-
+        current_game_state = match current_game_state {
+            GameState::MainMenu => main_menu_update(&mut internal_state),
+            GameState::InGame => in_game_update(&mut internal_state),
+            GameState::GameOver => game_over_update(&mut internal_state),
+            GameState::Exit => break,
+        };
         next_frame().await
     }
+}
+
+#[macroquad::main("Elf on the Shelf")]
+async fn main() {
+    run_game().await;
 }
