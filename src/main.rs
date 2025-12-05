@@ -7,8 +7,19 @@ async fn main() {
     let mut clicks = 0;
     let mut misses = 0;
 
-    let elf_tex = load_texture("./assets/elf.png").await.unwrap();
+    // let elf_tex = load_texture("./assets/elf.png").await.unwrap();
     // elf_tex.set_filter(FilterMode::Nearest);
+
+    let mut frames = Vec::<Texture2D>::new();
+
+    let size = 110;
+    for n in 1..=size {
+        let path = format!("./assets/ezgif-split/elf{}.png", n);
+        let tex = load_texture(&path).await.unwrap();
+        frames.push(tex);
+    }
+    let mut frame_index = 0;
+    let mut timer = 0.0;
 
     loop {
         clear_background(WHITE);
@@ -18,21 +29,29 @@ async fn main() {
         let shelf_y = screen_height() * 0.75;
         draw_rectangle(0.0, shelf_y, screen_width(), shelf_height, BROWN);
 
-        // elf face
+        // // elf face
         let elf_r = 22.0;
-        draw_circle(elf.x, elf.y, elf_r, BEIGE);
-        // elf red hat
-        draw_triangle(
-            vec2(elf.x, elf.y - elf_r - 6.0),
-            vec2(elf.x - 14.0, elf.y - elf_r + 8.0),
-            vec2(elf.x + 14.0, elf.y - elf_r + 8.0),
-            RED,
-        );
-        // elf eyes
-        draw_circle(elf.x - 7.0, elf.y - 4.0, 3.0, BLACK);
-        draw_circle(elf.x + 7.0, elf.y - 4.0, 3.0, BLACK);
+        // draw_circle(elf.x, elf.y, elf_r, BEIGE);
+        // // elf red hat
+        // draw_triangle(
+        //     vec2(elf.x, elf.y - elf_r - 6.0),
+        //     vec2(elf.x - 14.0, elf.y - elf_r + 8.0),
+        //     vec2(elf.x + 14.0, elf.y - elf_r + 8.0),
+        //     RED,
+        // );
+        // // elf eyes
+        // draw_circle(elf.x - 7.0, elf.y - 4.0, 3.0, BLACK);
+        // draw_circle(elf.x + 7.0, elf.y - 4.0, 3.0, BLACK);
 
-        draw_texture(&elf_tex, elf.x - 80.0, elf.y - 80.0, WHITE);
+        //draw_texture(&elf_tex, elf.x - 80.0, elf.y - 80.0, WHITE);
+        // loop {
+        timer += get_frame_time();
+        if timer > 0.02 {
+            frame_index = (frame_index + 1) % frames.len();
+            timer = 0.00;
+        }
+
+        draw_texture(&frames[frame_index], elf.x - 250.0, elf.y - 95.0, WHITE);
 
         // click logic
         if is_mouse_button_pressed(MouseButton::Left) {
@@ -41,13 +60,12 @@ async fn main() {
             if distance_from_elf <= elf_r + 8.0 {
                 // hit
                 clicks += 1;
-
-                elf.x = gen_range(30.0, screen_width() - 30.0);
-                elf.y = gen_range(50.0, shelf_y - elf_r - 10.0);
             } else {
                 misses += 1;
             }
             msg = format!("You hit my face: {clicks}, Missed: {misses}");
+            elf.x = gen_range(30.0, screen_width() - 30.0);
+            elf.y = gen_range(50.0, shelf_y - elf_r - 10.0);
         }
 
         draw_text(&msg, 20.0, 30.0, 28.0, BLACK);
