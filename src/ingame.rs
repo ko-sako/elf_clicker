@@ -9,7 +9,7 @@ pub fn in_game_update(internal_state: &mut InternalState) -> GameState {
     draw_rectangle(0.0, shelf_y, screen_width(), shelf_height, BROWN);
 
     // elf face
-    let elf_r = 40.0;
+    let elf_r = 30.0;
 
     internal_state.timer += get_frame_time();
     if internal_state.timer > 0.02 {
