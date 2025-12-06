@@ -48,6 +48,7 @@ pub fn in_game_update(internal_state: &mut InternalState) -> GameState {
     if internal_state.clicks == 5 {
         GameState::GameWon
     } else if internal_state.misses == 5 {
+        internal_state.timer = 0.0;
         GameState::GameLost
     } else {
         GameState::InGame
