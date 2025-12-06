@@ -19,8 +19,8 @@ pub fn in_game_update(internal_state: &mut InternalState) -> GameState {
 
     draw_texture(
         &internal_state.frames[internal_state.frame_index],
-        internal_state.elf.x - 250.0,
-        internal_state.elf.y - 95.0,
+        internal_state.elf.x - &internal_state.frames[internal_state.frame_index].width() / 2.0,
+        internal_state.elf.y - &internal_state.frames[internal_state.frame_index].height() / 2.0,
         WHITE,
     );
 
@@ -28,6 +28,7 @@ pub fn in_game_update(internal_state: &mut InternalState) -> GameState {
     if is_mouse_button_pressed(MouseButton::Left) {
         let (mouse_x, mouse_y) = mouse_position();
         let distance_from_elf = vec2(mouse_x, mouse_y).distance(internal_state.elf);
+
         if distance_from_elf <= elf_r + 8.0 {
             // hit
             internal_state.clicks += 1;
@@ -44,5 +45,9 @@ pub fn in_game_update(internal_state: &mut InternalState) -> GameState {
 
     draw_text(&internal_state.msg, 20.0, 30.0, 28.0, BLACK);
 
-    GameState::InGame
+    if internal_state.clicks == 5 {
+        GameState::GameOver
+    } else {
+        GameState::InGame
+    }
 }

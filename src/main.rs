@@ -42,7 +42,8 @@ async fn run_game() {
         frame_index: 0,
         timer: 0.0,
     };
-    let mut current_game_state = main_menu_update(&mut internal_state);
+
+    let mut current_game_state = GameState::MainMenu;
 
     loop {
         clear_background(WHITE);
