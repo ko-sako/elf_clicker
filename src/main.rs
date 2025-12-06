@@ -53,7 +53,7 @@ async fn run_game() {
     loop {
         clear_background(WHITE);
         current_game_state = match current_game_state {
-            GameState::MainMenu => main_menu_update(&mut internal_state),
+            GameState::MainMenu => main_menu_update(&mut internal_state).await,
             GameState::InGame => in_game_update(&mut internal_state),
             GameState::GameWon => game_won_update(&mut internal_state),
             GameState::GameLost => game_lost_update(&mut internal_state),
