@@ -18,6 +18,8 @@ struct InternalState {
     frames: Vec<Texture2D>,
     frame_index: usize,
     timer: f32,
+    game_lost_texture: Texture2D,
+    game_won_texture: Texture2D,
 }
 
 enum GameState {
@@ -46,6 +48,8 @@ async fn run_game() {
         frames,
         frame_index: 0,
         timer: 0.0,
+        game_lost_texture: load_texture("./assets/game_lose.png").await.unwrap(),
+        game_won_texture: load_texture("./assets/game_win.png").await.unwrap(),
     };
 
     let mut current_game_state = GameState::MainMenu;
