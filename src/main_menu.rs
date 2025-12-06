@@ -8,14 +8,16 @@ use macroquad::{
 use crate::{GameState, InternalState};
 
 pub async fn main_menu_update(_internal_state: &mut InternalState) -> GameState {
-    // Hey Kayo, this is where you can display a menu.
-
-    // return the InGame state when you want to transition, otherwise
-    // return GameState::MainMenu
     let bg = load_texture("assets/background.png").await.unwrap();
-    let elf = load_texture("assets/elf.png").await.unwrap();
     let start_game_sound = load_sound("assets/start_game_sound.ogg").await.unwrap();
     let main_menu_music = load_sound("assets/menu_bgm.ogg").await.unwrap();
+
+    let start_game_button = Rect::new(
+        screen_width() / 2.0 - 100.0,
+        screen_height() / 2.0 + 80.0,
+        200.0,
+        60.0,
+    );
 
     play_sound(
         &main_menu_music,
@@ -37,14 +39,6 @@ pub async fn main_menu_update(_internal_state: &mut InternalState) -> GameState 
                 dest_size: Some(vec2(screen_width(), screen_height())),
                 ..Default::default()
             },
-        );
-        draw_texture(&elf, 0.0, screen_height() / 2.0 - 100.0, WHITE);
-
-        let start_game_button = Rect::new(
-            screen_width() / 2.0 - 100.0,
-            screen_height() / 2.0,
-            200.0,
-            60.0,
         );
 
         let (mx, my) = mouse_position();
