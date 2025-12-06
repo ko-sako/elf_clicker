@@ -46,7 +46,9 @@ pub fn in_game_update(internal_state: &mut InternalState) -> GameState {
     draw_text(&internal_state.msg, 20.0, 30.0, 28.0, BLACK);
 
     if internal_state.clicks == 5 {
-        GameState::GameOver
+        GameState::GameWon
+    } else if internal_state.misses == 5 {
+        GameState::GameLost
     } else {
         GameState::InGame
     }

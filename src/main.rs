@@ -1,8 +1,12 @@
 use macroquad::prelude::*;
 
-use crate::{game_over::game_over_update, ingame::in_game_update, main_menu::main_menu_update};
+use crate::{
+    game_lost::game_lost_update, game_won::game_won_update, ingame::in_game_update,
+    main_menu::main_menu_update,
+};
 
-mod game_over;
+mod game_lost;
+mod game_won;
 mod ingame;
 mod main_menu;
 
@@ -19,7 +23,8 @@ struct InternalState {
 enum GameState {
     MainMenu,
     InGame,
-    GameOver,
+    GameWon,
+    GameLost,
     Exit,
 }
 
@@ -50,7 +55,8 @@ async fn run_game() {
         current_game_state = match current_game_state {
             GameState::MainMenu => main_menu_update(&mut internal_state),
             GameState::InGame => in_game_update(&mut internal_state),
-            GameState::GameOver => game_over_update(&mut internal_state),
+            GameState::GameWon => game_won_update(&mut internal_state),
+            GameState::GameLost => game_lost_update(&mut internal_state),
             GameState::Exit => break,
         };
         next_frame().await
