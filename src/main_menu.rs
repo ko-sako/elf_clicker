@@ -13,6 +13,7 @@ pub async fn main_menu_update(_internal_state: &mut InternalState) -> GameState 
     // return the InGame state when you want to transition, otherwise
     // return GameState::MainMenu
     let bg = load_texture("assets/background.png").await.unwrap();
+    let elf = load_texture("assets/elf.png").await.unwrap();
     let start_game_sound = load_sound("assets/start_game_sound.ogg").await.unwrap();
     let main_menu_music = load_sound("assets/menu_bgm.ogg").await.unwrap();
 
@@ -31,12 +32,13 @@ pub async fn main_menu_update(_internal_state: &mut InternalState) -> GameState 
             &bg,
             0.0,
             0.0,
-            BLACK,
+            WHITE,
             DrawTextureParams {
                 dest_size: Some(vec2(screen_width(), screen_height())),
                 ..Default::default()
             },
         );
+        draw_texture(&elf, 0.0, screen_height() / 2.0 - 100.0, WHITE);
 
         let start_game_button = Rect::new(
             screen_width() / 2.0 - 100.0,
@@ -73,6 +75,7 @@ pub async fn main_menu_update(_internal_state: &mut InternalState) -> GameState 
                     volume: 1.0,
                 },
             );
+            // wait a bit for listening the sound :)
             std::thread::sleep(Duration::from_millis(700));
             return GameState::InGame;
         }
