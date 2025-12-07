@@ -22,7 +22,7 @@ pub fn game_won_update(internal_state: &mut InternalState) -> GameState {
     draw_text("Ok, you win! I give up...", 20.0, 30.0, 28.0, BLACK);
 
     if internal_state.timer < 3.0 {
-        GameState::GameLost
+        GameState::GameWon
     } else {
         GameState::Exit
     }
