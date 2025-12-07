@@ -3,13 +3,24 @@ use macroquad::{prelude::*, rand::gen_range};
 use crate::{GameState, InternalState};
 
 pub fn in_game_update(internal_state: &mut InternalState) -> GameState {
+    draw_texture_ex(
+        &internal_state.ingame_texture,
+        0.0,
+        0.0,
+        WHITE,
+        DrawTextureParams {
+            dest_size: Some(vec2(screen_width(), screen_height())),
+            ..Default::default()
+        },
+    );
+
     // shelf
     let shelf_height = 40.0;
     let shelf_y = screen_height() * 0.75;
     draw_rectangle(0.0, shelf_y, screen_width(), shelf_height, BROWN);
 
     // elf face
-    let elf_r = 40.0;
+    let elf_r = 50.0;
 
     internal_state.timer += get_frame_time();
     if internal_state.timer > 0.02 {
@@ -21,6 +32,13 @@ pub fn in_game_update(internal_state: &mut InternalState) -> GameState {
         &internal_state.frames[internal_state.frame_index],
         internal_state.elf.x - &internal_state.frames[internal_state.frame_index].width() / 2.0,
         internal_state.elf.y - &internal_state.frames[internal_state.frame_index].height() / 2.0,
+        WHITE,
+    );
+
+    draw_texture(
+        &internal_state.mouse_texture,
+        mouse_position().0 - 94.0,
+        mouse_position().1 - 86.0,
         WHITE,
     );
 
@@ -43,7 +61,7 @@ pub fn in_game_update(internal_state: &mut InternalState) -> GameState {
         internal_state.elf.y = gen_range(50.0, shelf_y - elf_r - 10.0);
     }
 
-    draw_text(&internal_state.msg, 20.0, 30.0, 28.0, BLACK);
+    draw_text(&internal_state.msg, 20.0, 30.0, 28.0, WHITE);
 
     if internal_state.clicks == 5 {
         GameState::GameWon
