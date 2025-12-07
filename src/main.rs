@@ -67,7 +67,7 @@ async fn run_game() {
     }
 }
 
-#[macroquad::main("Elf on the Shelf")]
+#[macroquad::main("Snitch on the Shelf")]
 async fn main() {
     run_game().await;
 }
